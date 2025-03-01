@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Toast</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .success-btn {
+            background-color: #087f5b;
+            color: white;
+        }
+        
+        .error-btn {
+            background-color: #e03131;
+            color: white;
+        }
+        
+        .info-btn {
+            background-color: #1c7ed6;
+            color: white;
+        }
+        
+        .warning-btn {
+            background-color: #f59f00;
+            color: white;
+        }
+        
+        /* Sistema de Toast */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            max-width: 350px;
+            z-index: 9999;
+        }
+        
+        .toast {
+            margin-bottom: 10px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            animation: slide-in 0.3s forwards, fade-out 0.5s forwards 5s;
+        }
+        
+        .toast-success {
+            background-color: #087f5b;
+            color: white;
+            border-left: 5px solid #0ca678;
+        }
+        
+        .toast-error {
+            background-color: #e03131;
+            color: white;
+            border-left: 5px solid #c92a2a;
+        }
+        
+        .toast-info {
+            background-color: #1c7ed6;
+            color: white;
+            border-left: 5px solid #1971c2;
+        }
+        
+        .toast-warning {
+            background-color: #f59f00;
+            color: white;
+            border-left: 5px solid #f08c00;
+        }
+        
+        .toast i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        @keyframes slide-in {
+            100% { transform: translateX(0); }
+        }
+        
+        @keyframes fade-out {
+            0% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Teste de Sistema Toast</h1>
+    
+    <!-- Container de Toasts -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <div class="button-container">
+        <button class="success-btn" id="successBtn">Mostrar Toast de Sucesso</button>
+        <button class="error-btn" id="errorBtn">Mostrar Toast de Erro</button>
+        <button class="info-btn" id="infoBtn">Mostrar Toast de Info</button>
+        <button class="warning-btn" id="warningBtn">Mostrar Toast de Aviso</button>
+    </div>
+    
+    <div>
+        <h3>Instruções:</h3>
+        <p>Clique em qualquer botão acima para testar o sistema de toast.</p>
+        <p>Se nenhum toast aparecer, verifique o console para mensagens de erro.</p>
+    </div>
+
+    <script>
+        // Função para exibir toasts
+        const showToast = (type, message) => {
+            console.log(`Tentando mostrar toast do tipo: ${type} com mensagem: ${message}`);
+            
+            const toastContainer = document.getElementById('toastContainer');
+            if (!toastContainer) {
+                console.error('Container de toast não encontrado!');
+                return;
+            }
+            
+            // Cria o elemento toast
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            // Adiciona ícone baseado no tipo
+            let icon = '';
+            if (type === 'success') {
+                icon = '<i class="fas fa-check-circle"></i>';
+            } else if (type === 'error') {
+                icon = '<i class="fas fa-exclamation-circle"></i>';
+            } else if (type === 'info') {
+                icon = '<i class="fas fa-info-circle"></i>';
+            } else if (type === 'warning') {
+                icon = '<i class="fas fa-exclamation-triangle"></i>';
+            }
+            
+            // Define o conteúdo do toast
+            toast.innerHTML = `${icon} ${message}`;
+            
+            // Adiciona o toast ao container
+            toastContainer.appendChild(toast);
+            console.log('Toast adicionado ao container');
+            
+            // Remove o toast após a animação terminar (aproximadamente 5.3s)
+            setTimeout(() => {
+                toast.remove();
+                console.log('Toast removido');
+            }, 5300);
+        };
+        
+        // Event listeners para os botões
+        document.getElementById('successBtn').addEventListener('click', () => {
+            showToast('success', 'Operação realizada com sucesso!');
+        });
+        
+        document.getElementById('errorBtn').addEventListener('click', () => {
+            showToast('error', 'Ocorreu um erro ao processar sua solicitação.');
+        });
+        
+        document.getElementById('infoBtn').addEventListener('click', () => {
+            showToast('info', 'Aqui está uma informação importante para você.');
+        });
+        
+        document.getElementById('warningBtn').addEventListener('click', () => {
+            showToast('warning', 'Atenção: esta ação pode ter consequências.');
+        });
+        
+        // Mostra um toast de info ao carregar a página
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                showToast('info', 'Página de teste de toast carregada com sucesso!');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

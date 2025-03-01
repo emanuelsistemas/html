@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Sistema SAAS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #f5f5f5;
+            --input-bg: #2d2d2d;
+            --input-border: #3d3d3d;
+            --input-focus-border: #6c5ce7;
+            --success-color: #00b894;
+            --error-color: #d63031;
+            --label-color: #aaa;
+            --lite-color: #ffcc00; /* Cor adicional para elementos leves */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(108, 92, 231, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(162, 155, 254, 0.1) 0%, transparent 20%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo-icon {
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .icon-container {
+            position: relative;
+        }
+
+        .bot-container {
+            animation: pulse 2s infinite;
+        }
+
+        .bot-icon {
+            width: 48px;
+            height: 48px;
+            color: rgb(167, 139, 250);
+            stroke-width: 1.5;
+        }
+
+        .glow {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(168, 85, 247, 0.2);
+            filter: blur(16px);
+            border-radius: 9999px;
+            z-index: -1;
+        }
+
+        .message-container {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            animation: bounce 2s infinite;
+        }
+
+        .message-icon {
+            width: 20px;
+            height: 20px;
+            color: rgb(167, 139, 250);
+            stroke-width: 1.5;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+            50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+        }
+
+        @keyframes pulse {
+            50% { opacity: .5; }
+        }
+        
+        .logo-text {
+            font-family: 'Pacifico', cursive;
+            font-size: 36px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            margin-top: -5px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        p.subtitle {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #aaa;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 16px;
+            transition: all 0.3s ease;
+            height: 56px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
+        }
+
+        .form-group label {
+            position: absolute;
+            left: 16px;
+            top: 18px;
+            color: var(--label-color);
+            font-size: 16px;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .form-group input:focus ~ label,
+        .form-group input:not(:placeholder-shown) ~ label,
+        .form-group select:focus ~ label,
+        .form-group select:not([value=""]):not(:focus) ~ label {
+            top: -10px;
+            left: 10px;
+            font-size: 12px;
+            color: var(--primary-color);
+            background-color: var(--card-bg);
+            padding: 0 4px;
+            z-index: 2;
+            border-radius: 4px;
+        }
+
+        .form-group input::placeholder {
+            color: transparent;
+        }
+
+        .form-group input:focus::placeholder {
+            color: var(--label-color);
+        }
+
+        /* Estilos para o select */
+        .form-group select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        /* Estilos para o toggle CPF/CNPJ */
+        .document-type {
+            display: flex;
+            margin-bottom: 24px;
+        }
+
+        .document-type-option {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            background-color: var(--input-bg);
+            color: var(--label-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--input-border);
+        }
+
+        .document-type-option:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .document-type-option:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        .document-type-option.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--label-color);
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+            height: 56px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        button:hover::after {
+            transform: translateX(0);
+        }
+
+        .terms {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .terms a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        .terms a:hover {
+            text-decoration: underline;
+        }
+
+        .success-message, .error-message, .loading-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background-color: rgba(0, 184, 148, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .error-message {
+            background-color: rgba(214, 48, 49, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+        
+        .loading-message {
+            background-color: rgba(108, 92, 231, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            text-align: center;
+        }
+        
+        .fa-spin {
+            animation: fa-spin 2s infinite linear;
+        }
+        
+        @keyframes fa-spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Estilos para o Choices.js */
+        .choices {
+            margin-bottom: 0;
+        }
+
+        .choices__inner {
+            background-color: var(--input-bg) !important;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            min-height: 56px;
+            padding: 6px 7.5px 6px 16px;
+            display: flex;
+            align-items: center;
+            opacity: 1 !important;
+        }
+        
+        .choices.is-focused .choices__inner {
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
+        }
+        
+        .choices__list--single {
+            padding: 0;
+            display: flex;
+            align-items: center;
+            color: var(--text-color);
+            height: 100%;
+            width: 100%;
+            opacity: 1 !important;
+        }
+        
+        .choices__item--selectable {
+            text-align: left;
+            padding-left: 0;
+            display: flex;
+            align-items: center;
+            opacity: 1 !important;
+        }
+
+        /* Estilos específicos para o dropdown e seus itens */
+        .choices__list--dropdown {
+            background-color: var(--input-bg) !important;
+            border: 1px solid var(--input-border);
+            border-radius: 0 0 8px 8px;
+            opacity: 1 !important;
+        }
+
+        .choices__list--dropdown .choices__item--selectable {
+            color: var(--text-color) !important;
+            padding: 10px 16px;
+            background-color: var(--input-bg) !important;
+            opacity: 1 !important;
+        }
+
+        .choices__list--dropdown .choices__item--selectable.is-highlighted {
+            background-color: var(--primary-color) !important;
+            opacity: 1 !important;
+        }
+
+        .choices__input {
+            background-color: var(--input-bg) !important;
+            color: var(--text-color) !important;
+            opacity: 1 !important;
+        }
+
+        .choices__placeholder {
+            color: var(--text-color);
+            opacity: 0.7 !important;
+        }
+
+        .choices__list--dropdown .choices__item {
+            color: var(--text-color) !important;
+            background-color: var(--input-bg) !important;
+            opacity: 1 !important;
+        }
+
+        .choices__heading {
+            border-bottom: 1px solid var(--input-border);
+            color: var(--text-color) !important;
+            background-color: var(--input-bg) !important;
+            opacity: 1 !important;
+        }
+
+        .choices[data-type*="select-one"]:after {
+            border-color: var(--text-color) transparent transparent transparent;
+            opacity: 1 !important;
+        }
+
+        .choices[data-type*="select-one"].is-open:after {
+            border-color: transparent transparent var(--text-color) transparent;
+            opacity: 1 !important;
+        }
+
+        /* Estilos adicionais para garantir visibilidade das opções */
+        .choices__item {
+            color: var(--text-color) !important;
+            background-color: var(--input-bg) !important;
+            opacity: 1 !important;
+        }
+
+        .choices__item--choice {
+            color: var(--text-color) !important;
+            background-color: var(--input-bg) !important;
+            opacity: 1 !important;
+        }
+
+        /* Sobrescrever estilos padrão do Choices.js */
+        .choices__list--dropdown .choices__item {
+            background-color: var(--input-bg) !important;
+            opacity: 1 !important;
+        }
+
+        .choices__list--dropdown .choices__item--selectable.is-highlighted {
+            background-color: var(--primary-color) !important;
+            opacity: 1 !important;
+        }
+        
+        /* Forçar background escuro em todos os itens do dropdown */
+        .choices__list--dropdown .choices__list {
+            background-color: var(--input-bg) !important;
+            opacity: 1 !important;
+        }
+        
+        /* Garantir que não haja transparência */
+        .choices__list--dropdown, 
+        .choices__list--dropdown .choices__list,
+        .choices__list--dropdown .choices__item,
+        .choices__list--dropdown .choices__item--selectable {
+            background-color: var(--input-bg) !important;
+            color: var(--text-color) !important;
+            opacity: 1 !important;
+        }
+        
+        .custom-select-container {
+            position: relative;
+            width: 100%;
+        }
+        
+        .custom-select-selected {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 16px;
+            height: 56px;
+            outline: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .custom-select-selected:focus {
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
+        }
+        
+        .custom-select-selected i {
+            transition: transform 0.3s ease;
+        }
+        
+        .custom-select-container.open .custom-select-selected i {
+            transform: rotate(180deg);
+        }
+        
+        .custom-select-search {
+            display: none;
+            position: relative;
+            width: 100%;
+        }
+        
+        .custom-select-container.open .custom-select-search {
+            display: block;
+        }
+        
+        .custom-select-search input {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-top: none;
+            border-radius: 0;
+            color: var(--text-color);
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .custom-select-options {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            z-index: 10;
+        }
+        
+        .custom-select-container.open .custom-select-options {
+            display: block;
+        }
+        
+        .custom-select-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .custom-select-option:hover,
+        .custom-select-option.highlighted {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .custom-select-container.open .custom-select-selected {
+            border-radius: 8px 8px 0 0;
+            border-bottom-color: transparent;
+        }
+        
+        /* Estilo para o label do dropdown personalizado */
+        .custom-select-container label {
+            position: absolute;
+            left: 16px;
+            top: 18px;
+            color: var(--label-color);
+            font-size: 16px;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .custom-select-container.has-value label,
+        .custom-select-container.open label {
+            top: -10px;
+            left: 10px;
+            font-size: 12px;
+            color: var(--primary-color);
+            background-color: var(--card-bg);
+            padding: 0 4px;
+            z-index: 2;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">
+                <div class="icon-container">
+                    <div class="bot-container">
+                        <i data-lucide="bot" class="bot-icon"></i>
+                        <div class="glow"></div>
+                    </div>
+                    <div class="message-container">
+                        <i data-lucide="message-square" class="message-icon"></i>
+                    </div>
+                </div>
+            </div>
+            <h1 class="logo-text">ChatFood</h1>
+        </div>
+        <h1>Cadastre-se</h1>
+        <p class="subtitle">Conectando pessoas e sabores através da tecnologia</p>
+        
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle"></i> Cadastro realizado com sucesso!
+        </div>
+        
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-circle"></i> Erro ao realizar cadastro. Tente novamente.
+        </div>
+        
+        <div class="loading-message" id="loadingMessage" style="display: none;">
+            <i class="fas fa-spinner fa-spin"></i> Processando seu cadastro...
+        </div>
+        
+        <form id="signupForm">
+            <div class="form-group">
+                <div id="segmentContainer" class="custom-select-container">
+                    <!-- Select oculto para armazenar o valor -->
+                    <select id="segment" name="segment" style="display: none;" required>
+                        <option value="" disabled selected></option>
+                        <option value="restaurante">Restaurante</option>
+                        <option value="pizzaria">Pizzaria</option>
+                        <option value="hamburgueria">Hamburgueria</option>
+                        <option value="bar">Bar</option>
+                        <option value="lanchonete">Lanchonete</option>
+                        <option value="cafeteria">Cafeteria</option>
+                        <option value="padaria">Padaria</option>
+                        <option value="confeitaria">Confeitaria</option>
+                        <option value="doceria">Doceria</option>
+                        <option value="sorveteria">Sorveteria</option>
+                        <option value="acai">Açaí</option>
+                        <option value="comida_japonesa">Comida Japonesa</option>
+                        <option value="comida_chinesa">Comida Chinesa</option>
+                        <option value="comida_italiana">Comida Italiana</option>
+                        <option value="comida_mexicana">Comida Mexicana</option>
+                        <option value="comida_arabe">Comida Árabe</option>
+                        <option value="comida_vegana">Comida Vegana</option>
+                        <option value="comida_vegetariana">Comida Vegetariana</option>
+                        <option value="comida_fitness">Comida Fitness</option>
+                        <option value="delivery">Delivery</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                    
+                    <!-- Interface visual do dropdown personalizado -->
+                    <div class="custom-select-selected" tabindex="0">
+                        <span class="selected-text">Selecione um segmento</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    
+                    <!-- Campo de pesquisa -->
+                    <div class="custom-select-search">
+                        <input type="text" id="segmentSearch" placeholder="Digite para pesquisar...">
+                    </div>
+                    
+                    <!-- Lista de opções -->
+                    <div class="custom-select-options">
+                        <div class="custom-select-option" data-value="restaurante">Restaurante</div>
+                        <div class="custom-select-option" data-value="pizzaria">Pizzaria</div>
+                        <div class="custom-select-option" data-value="hamburgueria">Hamburgueria</div>
+                        <div class="custom-select-option" data-value="bar">Bar</div>
+                        <div class="custom-select-option" data-value="lanchonete">Lanchonete</div>
+                        <div class="custom-select-option" data-value="cafeteria">Cafeteria</div>
+                        <div class="custom-select-option" data-value="padaria">Padaria</div>
+                        <div class="custom-select-option" data-value="confeitaria">Confeitaria</div>
+                        <div class="custom-select-option" data-value="doceria">Doceria</div>
+                        <div class="custom-select-option" data-value="sorveteria">Sorveteria</div>
+                        <div class="custom-select-option" data-value="acai">Açaí</div>
+                        <div class="custom-select-option" data-value="comida_japonesa">Comida Japonesa</div>
+                        <div class="custom-select-option" data-value="comida_chinesa">Comida Chinesa</div>
+                        <div class="custom-select-option" data-value="comida_italiana">Comida Italiana</div>
+                        <div class="custom-select-option" data-value="comida_mexicana">Comida Mexicana</div>
+                        <div class="custom-select-option" data-value="comida_arabe">Comida Árabe</div>
+                        <div class="custom-select-option" data-value="comida_vegana">Comida Vegana</div>
+                        <div class="custom-select-option" data-value="comida_vegetariana">Comida Vegetariana</div>
+                        <div class="custom-select-option" data-value="comida_fitness">Comida Fitness</div>
+                        <div class="custom-select-option" data-value="delivery">Delivery</div>
+                        <div class="custom-select-option" data-value="outro">Outro</div>
+                    </div>
+                    
+                    <label for="segment" id="segmentLabel">Segmento</label>
+                </div>
+            </div>
+            
+            <div class="document-type">
+                <div class="document-type-option active" id="cnpjOption">CNPJ</div>
+                <div class="document-type-option" id="cpfOption">CPF</div>
+            </div>
+            
+            <div class="form-group">
+                <input type="text" id="document" name="document" placeholder=" " required>
+                <label for="document" id="documentLabel">CNPJ</label>
+            </div>
+            
+            <div class="form-group">
+                <input type="text" id="fantasyName" name="fantasyName" placeholder=" ">
+                <label for="fantasyName">Nome Fantasia</label>
+            </div>
+            
+            <div class="form-group">
+                <input type="text" id="name" name="name" placeholder=" " required>
+                <label for="name">Nome Completo</label>
+            </div>
+            
+            <div class="form-group">
+                <input type="email" id="email" name="email" placeholder=" " required>
+                <label for="email">E-mail</label>
+            </div>
+            
+            <div class="form-group">
+                <input type="tel" id="whatsapp" name="whatsapp" placeholder=" " required>
+                <label for="whatsapp">WhatsApp</label>
+            </div>
+            
+            <div class="form-group">
+                <input type="password" id="password" name="password" placeholder=" " required pattern="\d{4,}" title="A senha deve conter pelo menos 4 dígitos e apenas números">
+                <label for="password">Senha</label>
+                <span class="toggle-password"><i class="fas fa-eye"></i></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder=" " required>
+                <label for="confirmPassword">Confirmar Senha</label>
+                <span class="toggle-password"><i class="fas fa-eye"></i></span>
+            </div>
+            
+            <button type="submit" id="submitBtn">
+                Cadastrar
+            </button>
+        </form>
+        
+        <p class="terms">
+            Já possui uma conta? <a href="login.html" id="loginLink">Faça login aqui</a>
+        </p>
+    </div>
+
+    <script>
+        // Inicializa os ícones do Lucide
+        lucide.createIcons();
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializa o dropdown personalizado
+            const segmentContainer = document.getElementById('segmentContainer');
+            const segmentSelect = document.getElementById('segment');
+            const segmentSelected = segmentContainer.querySelector('.custom-select-selected');
+            const segmentSelectedText = segmentSelected.querySelector('.selected-text');
+            const segmentSearch = document.getElementById('segmentSearch');
+            const segmentOptions = segmentContainer.querySelectorAll('.custom-select-option');
+            
+            // Função para abrir/fechar o dropdown
+            segmentSelected.addEventListener('click', function() {
+                segmentContainer.classList.toggle('open');
+                if (segmentContainer.classList.contains('open')) {
+                    segmentSearch.focus();
+                }
+            });
+            
+            // Função para filtrar as opções
+            segmentSearch.addEventListener('input', function() {
+                const searchText = this.value.toLowerCase();
+                
+                segmentOptions.forEach(option => {
+                    const text = option.textContent.toLowerCase();
+                    if (text.includes(searchText)) {
+                        option.style.display = '';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Função para selecionar uma opção
+            segmentOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    const text = this.textContent;
+                    
+                    // Atualiza o texto selecionado
+                    segmentSelectedText.textContent = text;
+                    
+                    // Atualiza o valor do select oculto
+                    segmentSelect.value = value;
+                    
+                    // Dispara o evento change
+                    segmentSelect.dispatchEvent(new Event('change'));
+                    
+                    // Fecha o dropdown
+                    segmentContainer.classList.remove('open');
+                    
+                    // Marca o container como tendo valor
+                    segmentContainer.classList.add('has-value');
+                    
+                    // Limpa a pesquisa
+                    segmentSearch.value = '';
+                    
+                    // Mostra todas as opções novamente
+                    segmentOptions.forEach(opt => {
+                        opt.style.display = '';
+                    });
+                });
+            });
+            
+            // Fecha o dropdown quando clica fora
+            document.addEventListener('click', function(e) {
+                if (!segmentContainer.contains(e.target)) {
+                    segmentContainer.classList.remove('open');
+                    
+                    // Limpa a pesquisa
+                    segmentSearch.value = '';
+                    
+                    // Mostra todas as opções novamente
+                    segmentOptions.forEach(opt => {
+                        opt.style.display = '';
+                    });
+                }
+            });
+            
+            // Navegação por teclado
+            segmentSelected.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    segmentContainer.classList.toggle('open');
+                    if (segmentContainer.classList.contains('open')) {
+                        segmentSearch.focus();
+                    }
+                }
+            });
+            
+            // Acessibilidade - fechar com Escape
+            segmentSearch.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    segmentContainer.classList.remove('open');
+                    segmentSelected.focus();
+                }
+            });
+            
+            // Resto do código JavaScript
+            const form = document.getElementById('signupForm');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // URL do webhook no n8n para processamento do cadastro
+            const webhookUrl = 'https://chat-food-n8n.punzm2.easypanel.host/webhook-test/b8ba7a23-e130-4abb-9e4e-9c24d3407c10';
+            // IMPORTANTE: Substitua a URL acima pela URL real do seu webhook no n8n
+            
+            /*
+            * Formato esperado da resposta do n8n:
+            * {
+            *   success: true/false,           // Obrigatório: indica se o cadastro foi bem-sucedido
+            *   message: "Mensagem para o usuário",  // Opcional: mensagem personalizada para exibir ao usuário
+            *   redirect: true/false,          // Opcional: se deve redirecionar após o cadastro
+            *   redirectUrl: "url-para-redirecionar.html"  // Opcional: URL para redirecionar (padrão: login.html)
+            * }
+            */
+            
+            // Toggle entre CPF e CNPJ
+            const cpfOption = document.getElementById('cpfOption');
+            const cnpjOption = document.getElementById('cnpjOption');
+            const documentInput = document.getElementById('document');
+            const documentLabel = document.getElementById('documentLabel');
+            let documentType = 'CNPJ'; // Valor inicial
+            
+            // Função para aplicar a máscara de CNPJ
+            function applyCNPJMask(value) {
+                if (value.length > 14) value = value.slice(0, 14);
+                
+                if (value.length > 2) {
+                    value = value.substring(0, 2) + '.' + value.substring(2);
+                }
+                if (value.length > 6) {
+                    value = value.substring(0, 6) + '.' + value.substring(6);
+                }
+                if (value.length > 10) {
+                    value = value.substring(0, 10) + '/' + value.substring(10);
+                }
+                if (value.length > 15) {
+                    value = value.substring(0, 15) + '-' + value.substring(15);
+                }
+                
+                return value;
+            }
+            
+            // Função para aplicar a máscara de CPF
+            function applyCPFMask(value) {
+                if (value.length > 11) value = value.slice(0, 11);
+                
+                if (value.length > 3) {
+                    value = value.substring(0, 3) + '.' + value.substring(3);
+                }
+                if (value.length > 7) {
+                    value = value.substring(0, 7) + '.' + value.substring(7);
+                }
+                if (value.length > 11) {
+                    value = value.substring(0, 11) + '-' + value.substring(11);
+                }
+                
+                return value;
+            }
+            
+            // Configurar o campo de documento inicialmente como CNPJ
+            documentLabel.textContent = 'CNPJ';
+            documentInput.placeholder = ' ';
+            
+            cpfOption.addEventListener('click', function() {
+                cpfOption.classList.add('active');
+                cnpjOption.classList.remove('active');
+                documentType = 'CPF';
+                documentLabel.textContent = 'CPF';
+                documentInput.value = '';
+            });
+            
+            cnpjOption.addEventListener('click', function() {
+                cnpjOption.classList.add('active');
+                cpfOption.classList.remove('active');
+                documentType = 'CNPJ';
+                documentLabel.textContent = 'CNPJ';
+                documentInput.value = '';
+            });
+            
+            // Máscara para CPF/CNPJ
+            documentInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                
+                if (documentType === 'CPF') {
+                    e.target.value = applyCPFMask(value);
+                } else {
+                    e.target.value = applyCNPJMask(value);
+                }
+            });
+            
+            // Máscara para o WhatsApp
+            const whatsappInput = document.getElementById('whatsapp');
+            whatsappInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 11) value = value.slice(0, 11);
+                
+                if (value.length > 2) {
+                    value = '(' + value.substring(0, 2) + ') ' + value.substring(2);
+                }
+                if (value.length > 10) {
+                    value = value.substring(0, 10) + '-' + value.substring(10);
+                }
+                
+                e.target.value = value;
+            });
+            
+            // Permitir apenas números nos campos de senha
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            
+            function allowOnlyNumbers(e) {
+                e.target.value = e.target.value.replace(/\D/g, '');
+            }
+            
+            passwordInput.addEventListener('input', allowOnlyNumbers);
+            confirmPasswordInput.addEventListener('input', allowOnlyNumbers);
+            
+            // Toggle para mostrar/ocultar senha
+            const togglePasswordButtons = document.querySelectorAll('.toggle-password');
+            
+            togglePasswordButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const input = this.previousElementSibling.previousElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            });
+            
+            // Link de login
+            const loginLink = document.getElementById('loginLink');
+            if (loginLink) {
+                loginLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = 'login.html';
+                });
+            }
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validação de senha
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                
+                // Verifica se a senha tem pelo menos 4 caracteres e contém apenas números
+                if (!/^\d{4,}$/.test(password)) {
+                    errorMessage.style.display = 'block';
+                    errorMessage.textContent = 'A senha deve conter pelo menos 4 dígitos e apenas números!';
+                    successMessage.style.display = 'none';
+                    return;
+                }
+                
+                if (password !== confirmPassword) {
+                    errorMessage.style.display = 'block';
+                    errorMessage.textContent = 'As senhas não coincidem!';
+                    successMessage.style.display = 'none';
+                    return;
+                }
+                
+                // Validação adicional dos campos obrigatórios
+                const segment = document.getElementById('segment').value;
+                const documentValue = document.getElementById('document').value;
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const whatsapp = document.getElementById('whatsapp').value;
+                
+                // Verifica se todos os campos obrigatórios estão preenchidos
+                if (!segment || !documentValue || !name || !email || !whatsapp || !password) {
+                    errorMessage.style.display = 'block';
+                    errorMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> Preencha todos os campos obrigatórios.';
+                    successMessage.style.display = 'none';
+                    return;
+                }
+                
+                // Coleta os dados do formulário
+                const formData = {
+                    segment: segment,
+                    documentType: documentType,
+                    document: documentValue,
+                    fantasyName: document.getElementById('fantasyName').value,
+                    name: name,
+                    email: email,
+                    whatsapp: whatsapp,
+                    password: password,
+                    timestamp: new Date().toISOString() // Adiciona timestamp para rastreamento
+                };
+                
+                // Log para depuração (remover em produção)
+                console.log('Dados a serem enviados:', formData);
+                
+                // Desabilita o botão durante o envio e mostra mensagem de carregamento
+                const submitBtn = document.getElementById('submitBtn');
+                const loadingMessage = document.getElementById('loadingMessage');
+                
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Enviando...';
+                loadingMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+                
+                // Função para processar a resposta
+                const processResponse = (data) => {
+                    // Reativa o botão e oculta mensagem de carregamento
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Cadastrar';
+                    loadingMessage.style.display = 'none';
+                    
+                    // Verifica a resposta do n8n
+                    if (data.success === true) {
+                        // Exibe mensagem de sucesso
+                        successMessage.style.display = 'block';
+                        successMessage.innerHTML = `<i class="fas fa-check-circle"></i> ${data.message || 'Cadastro realizado com sucesso!'}`;
+                        errorMessage.style.display = 'none';
+                        
+                        // Reseta o formulário
+                        form.reset();
+                        
+                        // Reseta o dropdown personalizado
+                        segmentSelect.value = '';
+                        segmentSelectedText.textContent = 'Selecione um segmento';
+                        segmentContainer.classList.remove('has-value');
+                        segmentContainer.classList.remove('open');
+                        
+                        // Redireciona para a página de login após 2 segundos se especificado na resposta
+                        if (data.redirect === true) {
+                            setTimeout(() => {
+                                window.location.href = data.redirectUrl || 'login.html';
+                            }, 2000);
+                        }
+                    } else {
+                        // Exibe mensagem de erro retornada pelo n8n
+                        errorMessage.style.display = 'block';
+                        errorMessage.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${data.message || 'Erro ao realizar cadastro. Tente novamente.'}`;
+                        successMessage.style.display = 'none';
+                    }
+                };
+
+                // Tenta enviar usando XMLHttpRequest (alternativa ao fetch)
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', webhookUrl, true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader('Accept', 'application/json');
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                
+                xhr.onload = function() {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        try {
+                            const data = JSON.parse(xhr.responseText);
+                            processResponse(data);
+                        } catch (e) {
+                            // Erro ao processar a resposta JSON
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Cadastrar';
+                            loadingMessage.style.display = 'none';
+                            
+                            errorMessage.style.display = 'block';
+                            errorMessage.innerHTML = `<i class="fas fa-exclamation-circle"></i> Erro ao processar resposta do servidor`;
+                            successMessage.style.display = 'none';
+                            
+                            console.error('Erro ao processar resposta:', e);
+                            console.log('Resposta recebida:', xhr.responseText);
+                        }
+                    } else {
+                        // Erro na resposta do servidor
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Cadastrar';
+                        loadingMessage.style.display = 'none';
+                        
+                        errorMessage.style.display = 'block';
+                        errorMessage.innerHTML = `<i class="fas fa-exclamation-circle"></i> Erro na resposta do servidor: ${xhr.status}`;
+                        successMessage.style.display = 'none';
+                        
+                        console.error('Erro na resposta do servidor:', xhr.status);
+                        console.log('Resposta recebida:', xhr.responseText);
+                    }
+                };
+                
+                xhr.onerror = function() {
+                    // Erro de rede
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Cadastrar';
+                    loadingMessage.style.display = 'none';
+                    
+                    errorMessage.style.display = 'block';
+                    errorMessage.innerHTML = `<i class="fas fa-exclamation-circle"></i> Erro de conexão com o servidor. Verifique se o webhook está acessível.`;
+                    successMessage.style.display = 'none';
+                    
+                    console.error('Erro de rede ao enviar dados');
+                };
+                
+                // Envia os dados
+                xhr.send(JSON.stringify(formData));
+            });
+        });
+    </script>
+</body>
+</html>

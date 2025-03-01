@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistema SAAS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #f5f5f5;
+            --input-bg: #2d2d2d;
+            --input-border: #3d3d3d;
+            --input-focus-border: #6c5ce7;
+            --success-color: #00b894;
+            --error-color: #d63031;
+            --label-color: #aaa;
+            --lite-color: #ffcc00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(108, 92, 231, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(162, 155, 254, 0.1) 0%, transparent 20%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo-icon {
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .icon-container {
+            position: relative;
+        }
+
+        .bot-container {
+            animation: pulse 2s infinite;
+        }
+
+        .bot-icon {
+            width: 48px;
+            height: 48px;
+            color: rgb(167, 139, 250);
+            stroke-width: 1.5;
+        }
+
+        .glow {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(168, 85, 247, 0.2);
+            filter: blur(16px);
+            border-radius: 9999px;
+            z-index: -1;
+        }
+
+        .message-container {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            animation: bounce 2s infinite;
+        }
+
+        .message-icon {
+            width: 20px;
+            height: 20px;
+            color: rgb(167, 139, 250);
+            stroke-width: 1.5;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+            50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+        }
+
+        @keyframes pulse {
+            50% { opacity: .5; }
+        }
+        
+        .logo-text {
+            font-family: 'Pacifico', cursive;
+            font-size: 36px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            margin-top: -5px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        p.subtitle {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #aaa;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 16px;
+            transition: all 0.3s ease;
+            height: 56px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
+        }
+
+        .form-group label {
+            position: absolute;
+            left: 16px;
+            top: 18px;
+            color: var(--label-color);
+            font-size: 16px;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .form-group input:focus ~ label,
+        .form-group input:not(:placeholder-shown) ~ label {
+            top: -10px;
+            left: 10px;
+            font-size: 12px;
+            color: var(--primary-color);
+            background-color: var(--card-bg);
+            padding: 0 4px;
+            z-index: 2;
+            border-radius: 4px;
+        }
+
+        .form-group input::placeholder {
+            color: transparent;
+        }
+
+        .form-group input:focus::placeholder {
+            color: var(--label-color);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--label-color);
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+            height: 56px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        button:hover::after {
+            transform: translateX(0);
+        }
+
+        .terms {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .terms a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        .terms a:hover {
+            text-decoration: underline;
+        }
+
+        .success-message, .error-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background-color: rgba(0, 184, 148, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .error-message {
+            background-color: rgba(214, 48, 49, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: -15px;
+            margin-bottom: 20px;
+        }
+
+        .forgot-password a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .remember-me input[type="checkbox"] {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-color);
+        }
+
+        .remember-me label {
+            color: var(--label-color);
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">
+                <div class="icon-container">
+                    <div class="bot-container">
+                        <i data-lucide="bot" class="bot-icon"></i>
+                        <div class="glow"></div>
+                    </div>
+                    <div class="message-container">
+                        <i data-lucide="message-square" class="message-icon"></i>
+                    </div>
+                </div>
+            </div>
+            <h1 class="logo-text">ChatFood</h1>
+        </div>
+        <h1>Login</h1>
+        <p class="subtitle">Acesse sua conta e gerencie seu negócio</p>
+        
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle"></i> Login realizado com sucesso!
+        </div>
+        
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-circle"></i> E-mail ou senha incorretos. Tente novamente.
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <input type="email" id="email" name="email" placeholder=" " required>
+                <label for="email">E-mail</label>
+            </div>
+            
+            <div class="form-group">
+                <input type="password" id="password" name="password" placeholder=" " required>
+                <label for="password">Senha</label>
+                <span class="toggle-password"><i class="fas fa-eye"></i></span>
+            </div>
+            
+            <div class="remember-me">
+                <input type="checkbox" id="rememberMe" name="rememberMe">
+                <label for="rememberMe">Lembrar-me</label>
+            </div>
+            
+            <div class="forgot-password">
+                <a href="#">Esqueceu sua senha?</a>
+            </div>
+            
+            <button type="submit" id="submitBtn">
+                Entrar
+            </button>
+        </form>
+        
+        <p class="terms">
+            Não possui uma conta? <a href="cadastro_empresa_sistema.html">Cadastre-se aqui</a>
+        </p>
+    </div>
+
+    <script>
+        // Inicializa os ícones do Lucide
+        lucide.createIcons();
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Toggle para mostrar/ocultar senha
+            const togglePasswordButton = document.querySelector('.toggle-password');
+            
+            togglePasswordButton.addEventListener('click', function() {
+                const input = this.previousElementSibling.previousElementSibling;
+                const icon = this.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Coleta os dados do formulário
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const rememberMe = document.getElementById('rememberMe').checked;
+                
+                // Aqui você pode implementar a lógica de autenticação
+                // Por exemplo, enviar os dados para um endpoint de API
+                
+                // Simulação de autenticação (apenas para demonstração)
+                if (email && password) {
+                    // Simulação de sucesso
+                    successMessage.style.display = 'block';
+                    errorMessage.style.display = 'none';
+                    
+                    // Redirecionar para a página principal após o login
+                    setTimeout(function() {
+                        // window.location.href = 'dashboard.html';
+                        alert('Redirecionando para o dashboard...');
+                    }, 1500);
+                } else {
+                    // Simulação de erro
+                    errorMessage.style.display = 'block';
+                    successMessage.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
